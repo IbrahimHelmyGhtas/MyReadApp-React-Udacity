@@ -2,15 +2,15 @@ import React,{Component} from 'react'
 
 //import * as BooksAPI from '../BooksAPI'
 
-class SelectShelf extends Component
-{
+//class SelectShelf extends Component
+//{
 
-   
-    render(){
+   // statles component 
+  function SelectShelf(props) {
 
 
         
-        const{ fixedShelfList , selectedShelf, bookDetails,changeShelfHandle} = this.props;
+        const{ fixedShelfList , selectedShelf, bookDetails,changeShelfHandle} = props;
         return(
 
                             <div className="book-shelf-changer">
@@ -32,7 +32,7 @@ class SelectShelf extends Component
         )
     }
 
-}
+//}
 
 
 export default SelectShelf

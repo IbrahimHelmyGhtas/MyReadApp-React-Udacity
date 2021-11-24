@@ -1,11 +1,11 @@
 import React,{Component} from 'react'
 import Book  from './Book'
-class Bookcategory extends Component
-{
+//class Bookcategory extends Component
+//{
     
-
-    render(){
-        const{categoryName , bookList ,fixedShelfList,changeShelfHandle} = this.props
+    // statles component 
+ function   Bookcategory(props){
+        const{categoryName , bookList ,fixedShelfList,changeShelfHandle} = props
         return(
 
             <div className="bookshelf">
@@ -33,7 +33,7 @@ class Bookcategory extends Component
         )
     }
 
-}
+//}
 
 
 export default Bookcategory

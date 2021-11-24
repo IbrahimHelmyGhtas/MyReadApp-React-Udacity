@@ -2,12 +2,12 @@ import React,{Component} from 'react'
 import Book  from './Book'
 
 import { Link } from 'react-router-dom'
-class Search extends Component
-{
+//class Search extends Component
+//{
 
-    render(){
+  function Search(props){
 
-        const {searchNewBook, searchbookList ,fixedShelfList,changeShelfHandle} = this.props
+        const {searchNewBook, searchbookList ,fixedShelfList,changeShelfHandle} = props
         
         return(
 
@@ -59,7 +59,7 @@ class Search extends Component
         )
     }
 
-}
+//}
 
 
 export default Search
