@@ -14,12 +14,10 @@ class SelectShelf extends Component
         return(
 
                             <div className="book-shelf-changer">
-                              <select  onChange={(e)=>changeShelfHandle(bookDetails , e.target.value)}>
+                              <select  onChange={(e)=>changeShelfHandle(bookDetails , e.target.value)}  defaultValue={selectedShelf}>
                                 <option value="move" disabled>Move to...</option>
                                {   Object.keys(fixedShelfList).map((shelf) => (
-                                            (shelf === selectedShelf) ?
-                                              <option key={shelf} value={shelf} selected >{fixedShelfList[shelf]}</option>
-                                             :
+                                            
                                              <option key={shelf} value={shelf} >{fixedShelfList[shelf]}</option>
                                             
 
