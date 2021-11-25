@@ -3,7 +3,7 @@ import * as BooksAPI from './BooksAPI'
 import Bookcategory from './Components/Bookcategory'
 import './App.css'
 import Search from './Components/Search'
-
+import LoadingOverlay from 'react-loading-overlay';
 
 import { Route,Link } from 'react-router-dom'
 
@@ -26,7 +26,8 @@ class BooksApp extends React.Component {
      */
     showSearchPage: false,
     bookList : [],
-    searchbookList : [] 
+    searchbookList : [] ,
+    isActive : true
 
   }
 
@@ -45,8 +46,8 @@ class BooksApp extends React.Component {
           this.setState((preState) => ({
            // bookList : this.state.bookList 
            
-                bookList : this.state.bookList.filter(b => b.id !== bookDetails.id).concat([ bookDetails ])
-          
+                bookList : this.state.bookList.filter(b => b.id !== bookDetails.id).concat([ bookDetails ]),
+                isActive : false
           }))
         
         )
@@ -66,12 +67,25 @@ class BooksApp extends React.Component {
 
           (
 
-            this.setState((preState) => ({
-              searchbookList : res,
-          
+            this.setState((preState) => {
+
+
+              const booksWithShelf = res.map((book) => {
+                const bookShelf = preState.bookList.find(
+                  (b) => b.id === book.id
+                );
+                return { ...book, shelf: bookShelf ? bookShelf.shelf : 'none' };
+              });
+  
+              return {
+                searchbookList: booksWithShelf,
+                isActive : false
+              };
+            //  searchbookList : res,
+            
   
   
-            }))
+            })
 
           ) :
           (
@@ -123,7 +137,8 @@ class BooksApp extends React.Component {
  
       BooksAPI.getAll().then((bookList)=>{
           this.setState((prevState)=>({
-            bookList : bookList
+            bookList : bookList,
+            isActive : false
 
 
           }))
@@ -139,55 +154,65 @@ class BooksApp extends React.Component {
 
   
     return (
-      <div className="app">
+
+
+<LoadingOverlay
+  active={this.state.isActive}
+  spinner
+  text='Loading your books ....'
+  >
+    <div className="app">
 
        
-          <Route  exact path='/'  render={()=>(
+<Route  exact path='/'  render={()=>(
 
-            <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
-            </div>
-            <div className="list-books-content">
-              <div>
+  <div className="list-books">
+  <div className="list-books-title">
+    <h1>MyReads</h1>
+  </div>
+  <div className="list-books-content">
+    <div>
 
-             
-                {
-                    Object.keys(fixedShelfList).map( (shelf) =>  ( <Bookcategory  changeShelfHandle={this.changeShelfHandle}  fixedShelfList={fixedShelfList}  key={fixedShelfList[shelf]} categoryName={fixedShelfList[shelf]} bookList={this.state.bookList.filter((x)=> x.shelf === shelf)     } /> ) )
-                }
-               
-                
-              </div>
-            </div>
-            <div className="open-search">
-              
-              <Link   to='/search'  >
-                
-              <button >Add a book</button>
-                
-                
-                </Link>
-            </div>
-          </div>
-
-
-          )} />
-
-          <Route exact  path='/search'  render={()=>(
-
-          <Search handleClose={this.handleClose}   searchNewBook={this.searchNewBook} changeShelfHandle={this.changeShelfHandle}  fixedShelfList={fixedShelfList}   searchbookList={this.state.searchbookList} />
-          )} />
-
-        {/*  <button onClick={() => this.setState({ showSearchPage: true })}>Add a book</button>
-        
-        this.state.showSearchPage ? (
+   
+      {
+          Object.keys(fixedShelfList).map( (shelf) =>  ( <Bookcategory  changeShelfHandle={this.changeShelfHandle}  fixedShelfList={fixedShelfList}  key={fixedShelfList[shelf]} categoryName={fixedShelfList[shelf]} bookList={this.state.bookList.filter((x)=> x.shelf === shelf)     } /> ) )
+      }
+     
+      
+    </div>
+  </div>
+  <div className="open-search">
     
-        ) : (
-          
-        )*/}
+    <Link   to='/search'  >
+      
+    <button >Add a book</button>
+      
+      
+      </Link>
+  </div>
+</div>
 
-       
-      </div>
+
+)} />
+
+<Route exact  path='/search'  render={()=>(
+
+<Search handleClose={this.handleClose}   searchNewBook={this.searchNewBook} changeShelfHandle={this.changeShelfHandle}  fixedShelfList={fixedShelfList}   searchbookList={this.state.searchbookList} />
+)} />
+
+{/*  <button onClick={() => this.setState({ showSearchPage: true })}>Add a book</button>
+
+this.state.showSearchPage ? (
+
+) : (
+
+)*/}
+
+
+</div>
+</LoadingOverlay>
+
+    
     )
   }
 }
